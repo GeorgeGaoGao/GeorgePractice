@@ -71,21 +71,25 @@ namespace AdvancedCSharp
 
         }
 
-        private static void ShowAlarmInfo(object? sender, TemperatureExceedEventArgs e)
+        private static void  ShowAlarmInfo(object? sender, TemperatureExceedEventArgs e)
         {
             Type type = e.GetType();
             PropertyInfo[] propertyInfos = type.GetProperties();
             foreach (var propertyInfo in propertyInfos)
             {
-                object value = propertyInfo.GetValue(e);
                 DisplayInfoAttribute info = propertyInfo.GetCustomAttribute<DisplayInfoAttribute>();
-                Console.WriteLine($"{info.Name}:{value} {info.Unit}");
+                if (info != null)
+                {
+                    object value = propertyInfo.GetValue(e);
+                    Console.WriteLine($"{info.Name}:{value} {info.Unit}");
+                }
+
             }
         }
 
         private static void WriteLog(object? sender, TemperatureExceedEventArgs e)
         {
-            bool temp= e.Temperature > e.AlarmLimit;
+            bool temp = e.Temperature > e.AlarmLimit;
             Console.WriteLine($"是否报警：{temp} ");
         }
 
@@ -127,7 +131,7 @@ namespace AdvancedCSharp
         //{
         //    Console.WriteLine($"运行日志：已记录温度 {temperature} ℃");
         //}
-        static bool IsAlarming(double temperature,double alarmLimit)
+        static bool IsAlarming(double temperature, double alarmLimit)
         {
             return temperature > alarmLimit;
         }
@@ -144,5 +148,5 @@ namespace AdvancedCSharp
             }
         }
     }
-    
+
 }
